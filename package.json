@@ -1,0 +1,49 @@
+{
+  "name": "yamp-js",
+  "description": "Yamp protocol implementation in JavaScript for Node.Js and Browser ",
+  "version": "0.0.1",
+  "author": {
+    "name": "Yaroslav Pogrebnyak",
+    "url": "http://pogrebnyak.info",
+    "email": "yyyaroslav@gmail.com"
+  },
+  "homepage": "http://github.com/yyyar/yamp-js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:yyyar/yamp-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yyyar/yamp-js/issues"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">= 7.8.0"
+  },
+  "keywords": [
+    "client-server",
+    "yamp",
+    "protocol",
+    "websocket",
+    "tls",
+    "tcp",
+    "communication",
+    "socket"
+  ],
+  "main": "./lib/index.js",
+  "scripts": {
+    "test": "nodeunit tests --reporter verbose",
+    "browserify": "browserify  --standalone Yamp lib/index.js | babel --plugins transform-async-to-generator | uglifyjs -o ./dist/yamp.bundle.min.js"
+  },
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "bl": "^1.2.1",
+    "lodash": "^4.17.4",
+    "msgpack5": "^3.4.1",
+    "uuid": "^3.0.1",
+    "websocket": "^1.0.24"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "nodeunit": "^0.11.0"
+  }
+}

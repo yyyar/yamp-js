@@ -1,0 +1,38 @@
+<html>
+
+<head>
+    <script src="../dist/yamp.bundle.min.js"></script>
+
+    <script>
+        Yamp.createClient('websocket-browser', {url: 'ws://localhost:8888'}).connect((err, conn) => {
+
+           if (err) {
+               return console.log("Can't open connection: " +  err);
+           }
+
+           conn.on('close', () => {
+                console.log('Connection closed');
+           })
+
+           setInterval( () => {
+
+                var n = Math.round(Math.random(0,1)*100)
+
+                console.log("Sending request mul", n);
+
+                conn.sendRequest("mul", n, function(err, res) {
+                    console.log("Got response: ", err, res);
+                    document.body.insertBefore(document.createTextNode(res + " "), document.body.firstChild);
+                });
+
+            }, 1000);
+
+        });
+    </script>
+
+</head>
+
+<body>
+</body>
+
+</html>
