@@ -15,7 +15,7 @@ module.exports = {
 
         /* ---------- Server ---------- */
 
-        var server = Yamp.createServer('websocket', { port: PORT }).serve();
+        var server = Yamp.createServer('tcp', { host:'localhost', port: PORT }).serve();
 
         server.on('connection', (conn) => {
 
@@ -36,7 +36,7 @@ module.exports = {
 
         /* ---------- Client ---------- */
 
-        var client = Yamp.createClient('websocket', {url: `ws://localhost:${PORT}`});
+        var client = Yamp.createClient('tcp', {host: 'localhost', port: PORT});
 
         client.connect((err, conn) => {
 
