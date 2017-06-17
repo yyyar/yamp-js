@@ -70,7 +70,7 @@ module.exports = {
 
 
         // 2. Server handles request and sends the same request to client
-        this.connToClient.onRequest('add', (obj, respond) => {
+        this.connToClient.onRequest('add', (ctx, obj, respond) => {
             test.deepEqual([1,2], obj, 'Server got valid request obj');
 
             this.connToClient.sendRequest('add', obj, (err, response) => {
@@ -80,7 +80,7 @@ module.exports = {
 
         // 3. Client handles request and sends it back to server,
         //    and then server will send response to client
-        this.connToServer.onRequest('add', (obj, respond) => {
+        this.connToServer.onRequest('add', (ctx, obj, respond) => {
             test.deepEqual([1,2], obj, 'Client got request obj');
             respond(null, 3);
         });
@@ -93,33 +93,36 @@ module.exports = {
      */
     'request cancel': function(test) {
 
-        let request = this.connToServer.sendRequest('add', [1,2], (err, response) => {
-            test.equals('cancelled', err, 'Cancelled error in response');
-            test.equals(null, response, 'No response value');
-            test.done();
-            this.connToServer.close();
+        const INTERVAL = 200,
+              STOP_AFTER = 3;
+
+        let request = this.connToServer.sendRequest('follow', null, {progressive:true}, (err, response, progress) => {
+
+            if (err) {
+                test.equals('the end', err, 'Cancelled error in response');
+                test.done();
+                return this.connToServer.close();
+            }
+
+            if (response == STOP_AFTER) {
+                return request.cancel();
+            }
+
+            test.equals(true, progress, 'Got progressie response ' + response);
         });
 
-        request.cancel();
+        this.connToClient.onRequest('follow', (ctx, obj, respond) => {
 
-        var t = null;
+            ctx.i = 0;
+            ctx.t = setInterval(() => {
+                respond(null, ctx.i++, {progress:true});
+            }, INTERVAL);
 
-        this.connToClient.onRequest('add', (obj, respond) => {
-
-            test.deepEqual([1,2], obj, 'Got valid request body in request handler');
-
-            t = setTimeout(() => {
-                respond(null, 3);
-            }, 1000);
-
-        }, (graceful, done) => {
+        }, (ctx, isRollback, done) => {
 
             test.ok(true, 'Cancel callback called');
-            clearTimeout(t);
-
-            if (graceful) {
-                done();
-            }
+            clearInterval(ctx.t);
+            done("the end");
         });
     },
 
@@ -146,7 +149,7 @@ module.exports = {
 
         });
 
-        this.connToClient.onRequest('sequence', (obj, respond) => {
+        this.connToClient.onRequest('sequence', (ctx, obj, respond) => {
 
             var interval = setInterval(() => {
                 if (i > obj) {
