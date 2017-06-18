@@ -48,8 +48,6 @@ module.exports = {
         });
     },
 
-
-
     'Client sends close and server can handle it': (test) => {
 
         /* ---------- Server ---------- */
