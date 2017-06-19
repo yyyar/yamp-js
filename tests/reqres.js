@@ -96,7 +96,7 @@ module.exports = {
         const INTERVAL = 200,
               STOP_AFTER = 3;
 
-        let request = this.connToServer.sendRequest('follow', null, {progressive:true}, (err, response, progress) => {
+        let request = this.connToServer.sendRequest('follow', null, (err, response, progress) => {
 
             if (err) {
                 test.equals('the end', err, 'Cancelled error in response');
@@ -128,14 +128,14 @@ module.exports = {
 
 
      /**
-     * Request can be progressive
+     * Responses can be progressive
      */
-    'progressive requests': function(test) {
+    'progressive responses': function(test) {
 
         const NUM = 3;
         let i = 1;
 
-        let request = this.connToServer.sendRequest('sequence', NUM, {progressive: true}, (err, response, progress) => {
+        let request = this.connToServer.sendRequest('sequence', NUM, (err, response, progress) => {
 
             if (progress) {
                 test.equals(i-1, response, 'progressive response ' + response);
@@ -162,11 +162,5 @@ module.exports = {
 
         });
     },
-
-
-
-
-
 }
-
 
