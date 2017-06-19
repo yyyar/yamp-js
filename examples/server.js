@@ -1,6 +1,6 @@
 const Yamp = require('../lib');
 
-let server = Yamp.createServer('tcp', { host:'localhost', port: 8888 }).serve();
+let server = Yamp.createServer('websocket', { host:'localhost', port: 8888 }).serve();
 
 server.on('connection', (conn) => {
 

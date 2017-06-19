@@ -162,5 +162,33 @@ module.exports = {
 
         });
     },
+
+
+    /**
+     * Responses timeout
+     */
+    'response timeout': function(test) {
+
+        const TIMEOUT = 500;
+
+        this.connToServer.sendRequest('foo', null, {timeoutMs: TIMEOUT}, (err, response) => {
+
+           test.equals('Timeout', err.message);
+
+           this.connToServer.close();
+           this.connToClient.close();
+           test.done();
+
+        });
+
+        this.connToClient.onRequest('foo', (ctx, obj, respond) => {
+
+            setTimeout(() => {
+                respond(null, "too late");
+            }, TIMEOUT*2)
+
+        });
+    },
+
 }
 
