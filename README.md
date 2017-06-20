@@ -37,7 +37,7 @@ server.on('connection', (conn) => {
     });
 
     /* handle request */
-    conn.onRequest('sum', (a, sendResponse) => {
+    conn.onRequest('sum', (ctx, a, sendResponse) => {
 
         if (!Array.isArray(a)) {
             return sendResponse("Error. Not an array");
@@ -78,7 +78,7 @@ Browser JavaScript (Client):
           })
 
           /* handle request on client */
-          conn.onRequest('mul-on-client', (a, sendResponse) => {
+          conn.onRequest('mul-on-client', (ctx, a, sendResponse) => {
 
               if (!Array.isArray(a)) {
                   return sendResponse("Error. Not an array");

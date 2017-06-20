@@ -6,7 +6,7 @@ server.on('connection', (conn) => {
 
     console.log('Got new connection');
 
-    conn.onRequest('mul', (e, respond) => {
+    conn.onRequest('mul', (ctx, e, respond) => {
 
         if (typeof(e) != 'number') {
             return respond("Bad format");
