@@ -52,7 +52,10 @@ module.exports = {
 
         /* ---------- Server ---------- */
 
-        var server = Yamp.createServer('websocket', { port: PORT }).serve();
+        var server = Yamp.createServer('websocket', { port: PORT, serverConfig: {
+            maxReceivedFrameSize: 1000000,
+            maxReceivedMessageSize:1000000
+        }}).serve();
 
         server.on('connection', (conn) => {
 
